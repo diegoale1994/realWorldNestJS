@@ -8,6 +8,7 @@ import { LoginUserDto } from './dto/loginUser.dto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { UserEntity } from './user.entity';
 import { compare } from 'bcrypt';
+import { UpdateUserDto } from './dto/updateUserDto';
 
 @Injectable()
 export class UserService {
@@ -65,5 +66,11 @@ export class UserService {
 
     async findById(id: number): Promise<UserEntity> {
         return await this.userRepository.findOne(id);
+    }
+
+    async updateUser(userId: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+        const user = await this.findById(userId);
+        Object.assign(user, updateUserDto);
+        return await this.userRepository.save(user);
     }
 }
